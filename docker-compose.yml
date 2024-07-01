@@ -1,0 +1,33 @@
+networks:
+  devops2-network:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootPassword
+      MYSQL_DATABASE: taskiteasy2
+      MYSQL_USERNAME: Juliano
+      MYSQL_PASSWORD: password
+    networks:
+      - devops2-network
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3308:3306"
+
+  php-apache:
+    depends_on: 
+      - mysql
+    build: ./
+    networks:
+      - devops2-network
+    volumes:
+      - .:/var/www/html
+    ports:
+      - "8090:80"
+
+volumes:
+  mysql_data:
