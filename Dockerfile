@@ -23,7 +23,6 @@ RUN chown -R www-data:www-data /var/www/html/node_modules
 
 RUN chmod -R 775 /var/www/html/node_modules
 
-
 EXPOSE 80
 
 
