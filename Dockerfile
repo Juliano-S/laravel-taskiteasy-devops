@@ -18,10 +18,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y nodejs
 
-RUN chown -R www-data:www-data /var/www/html/node_modules
-RUN chmod -R 775 /var/www/html/node_modules
-
-
 EXPOSE 80
 
 CMD ["apache2-foreground"]
