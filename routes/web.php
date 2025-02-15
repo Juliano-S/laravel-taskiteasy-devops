@@ -36,6 +36,18 @@ Route::get('/error500', function() {
     return view('error500');
 })->middleware(['auth', 'verified'])->name('error500');
 
+Route::post('/tasks/{task}/complete',
+ [TaskController::class, 'complete'])->name('tasks.complete');
+
+Route::get('/tasks/{task}/tasks/create',
+ [TaskController::class, 'createChildTask'])->name('tasks.tasks.create');
+
+ Route::post('/posts/{post}/comments',
+  [PostController::class, 'storeComment'])->name('posts.comments.store');
+
+ Route::post('/posts/{post}/complete',
+  [PostController::class, 'complete'])->name('posts.complete');
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
