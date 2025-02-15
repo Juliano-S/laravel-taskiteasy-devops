@@ -1,33 +1,42 @@
-networks:
-  devops2-network:
-    driver: bridge
-
 services:
   mysql:
-    image: mysql:8
-    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile.mysql
+    container_name: my-mysql
     environment:
-      MYSQL_ROOT_PASSWORD: rootPassword
+      MYSQL_ROOT_PASSWORD: devops1
       MYSQL_DATABASE: taskiteasy2
-      MYSQL_USERNAME: Juliano
-      MYSQL_PASSWORD: password
-    networks:
-      - devops2-network
-    volumes:
-      - mysql_data:/var/lib/mysql
     ports:
       - "3308:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
 
-  php-apache:
-    depends_on: 
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php
+    depends_on:
       - mysql
-    build: ./
-    networks:
-      - devops2-network
+    ports:
+      - "8000:8000"
     volumes:
       - .:/var/www/html
+    command: php artisan serve --host=0.0.0.0 --port=8000
+
+  phpmyadmin:
+    build:
+      context: .
+      dockerfile: Dockerfile.phpmyadmin
+    container_name: my-phpmyadmin
+    depends_on:
+      - mysql
+    environment:
+      PMA_HOST: my-mysql
+      MYSQL_ROOT_PASSWORD: devops1
     ports:
-      - "8090:80"
+      - "8080:80"
 
 volumes:
-  mysql_data:
+  mysql-data:
